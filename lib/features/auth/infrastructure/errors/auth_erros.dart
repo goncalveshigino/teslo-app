@@ -11,7 +11,6 @@ class CustomError implements Exception {
   
   CustomError(
      this.message
-   
   );
 }
 

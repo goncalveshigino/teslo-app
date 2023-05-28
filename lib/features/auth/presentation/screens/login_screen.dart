@@ -6,48 +6,45 @@ import 'package:teslo_shop/features/shared/shared.dart';
 
 import '../providers/providers.dart';
 
-
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-
     final size = MediaQuery.of(context).size;
     final scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
 
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
-        body: GeometricalBackground( 
-          child: SingleChildScrollView(
-            physics: const ClampingScrollPhysics(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox( height: 80 ),
-                // Icon Banner
-                const Icon( 
-                  Icons.production_quantity_limits_rounded, 
-                  color: Colors.white,
-                  size: 100,
-                ),
-                const SizedBox( height: 80 ),
-    
-                Container(
-                  height: size.height - 260, // 80 los dos sizebox y 100 el ícono
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: scaffoldBackgroundColor,
-                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(100)),
-                  ),
-                  child: const _LoginForm(),
-                )
-              ],
+          body: GeometricalBackground(
+              child: SingleChildScrollView(
+        physics: const ClampingScrollPhysics(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(height: 80),
+            // Icon Banner
+            const Icon(
+              Icons.production_quantity_limits_rounded,
+              color: Colors.white,
+              size: 100,
             ),
-          )
-        )
-      ),
+            const SizedBox(height: 80),
+
+            Container(
+              height: size.height - 260, // 80 los dos sizebox y 100 el ícono
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: scaffoldBackgroundColor,
+                borderRadius:
+                    const BorderRadius.only(topLeft: Radius.circular(100)),
+              ),
+              child: const _LoginForm(),
+            )
+          ],
+        ),
+      ))),
     );
   }
 }
@@ -55,24 +52,21 @@ class LoginScreen extends StatelessWidget {
 class _LoginForm extends ConsumerWidget {
   const _LoginForm();
 
-  void showSnackbar( BuildContext context, String message ){
-    ScaffoldMessenger.of(context).hideCurrentSnackBar(); 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message))
-    );
+  void showSnackbar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final loginForm = ref.watch(loginFormProvider);
 
-    final loginForm = ref.watch( loginFormProvider );
+    ref.listen(authProvider, (previous, next) {
+      if (next.errorMessage.isEmpty) return;
 
-    ref.listen(authProvider, (previous, next) { 
-      if( next.errorMessage.isEmpty ) return;
-
-      showSnackbar( context, next.errorMessage );
+      showSnackbar(context, next.errorMessage);
     });
-   
 
     final textStyles = Theme.of(context).textTheme;
 
@@ -80,57 +74,46 @@ class _LoginForm extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 50),
       child: Column(
         children: [
-          const SizedBox( height: 50 ),
-          Text('Login', style: textStyles.titleLarge ),
-          const SizedBox( height: 90 ),
-
-           CustomTextFormField(
-            label: 'Email',
-            keyboardType: TextInputType.emailAddress, 
-            onChanged: ref.read(loginFormProvider.notifier).onEmailChange, 
-            errorMessage: loginForm.isFormPosted 
-            ? loginForm.email.errorMessage
-            : null
-          ),
-          const SizedBox( height: 30 ),
-
+          const SizedBox(height: 50),
+          Text('Login', style: textStyles.titleLarge),
+          const SizedBox(height: 90),
           CustomTextFormField(
-            label: 'Password',
-            obscureText: true, 
-            onChanged: ref.read(loginFormProvider.notifier).onPasswordChange, 
-            errorMessage: loginForm.isFormPosted
-             ? loginForm.password.errorMessage
-             : null
-          ),
-    
-          const SizedBox( height: 30 ),
-
+              label: 'Email',
+              keyboardType: TextInputType.emailAddress,
+              onChanged: ref.read(loginFormProvider.notifier).onEmailChange,
+              errorMessage:
+                  loginForm.isFormPosted ? loginForm.email.errorMessage : null),
+          const SizedBox(height: 30),
+          CustomTextFormField(
+              label: 'Password',
+              obscureText: true,
+              onChanged: ref.read(loginFormProvider.notifier).onPasswordChange,
+              errorMessage: loginForm.isFormPosted
+                  ? loginForm.password.errorMessage
+                  : null),
+          const SizedBox(height: 30),
           SizedBox(
-            width: double.infinity,
-            height: 60,
-            child: CustomFilledButton(
-              text: 'Entrar',
-              buttonColor: Colors.black,
-              onPressed: (){
-                ref.read(loginFormProvider.notifier).onFormSubmit();
-              },
-            )
-          ),
-
-          const Spacer( flex: 2 ),
-
+              width: double.infinity,
+              height: 60,
+              child: CustomFilledButton(
+                text: 'Entrar',
+                buttonColor: Colors.black,
+                onPressed: () {
+                  context.push('/');
+                  ref.read(loginFormProvider.notifier).onFormSubmit();
+                },
+              )),
+          const Spacer(flex: 2),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text('Nao tem uma conta?'),
               TextButton(
-                onPressed: ()=> context.push('/register'), 
-                child: const Text('Cria uma aqui')
-              )
+                  onPressed: () => context.push('/register'),
+                  child: const Text('Cria uma aqui'))
             ],
           ),
-
-          const Spacer( flex: 1),
+          const Spacer(flex: 1),
         ],
       ),
     );

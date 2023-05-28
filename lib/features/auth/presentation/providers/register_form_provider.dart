@@ -3,16 +3,24 @@ import 'package:formz/formz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teslo_shop/features/shared/shared.dart';
 
+import 'providers.dart';
+
 //! 3 - StateNotifierProvider - Que sera consumido fora
-final registerFormProvider =
-    StateNotifierProvider.autoDispose<RegisterFormNotifier, RegisterFormState>(
-        (ref) {
-  return RegisterFormNotifier();
+final registerFormProvider = StateNotifierProvider<RegisterFormNotifier, RegisterFormState>((ref) {
+
+  final registerUserCallback = ref.watch( authProvider.notifier).register;
+
+  return RegisterFormNotifier(registerUserCallback: registerUserCallback );
+
 });
 
 //! 2 - Como implementamos um notifier
 class RegisterFormNotifier extends StateNotifier<RegisterFormState> {
-  RegisterFormNotifier() : super(RegisterFormState());
+
+  final Function(String, String, String ) registerUserCallback;
+
+  RegisterFormNotifier({required this.registerUserCallback})
+      : super(RegisterFormState());
 
   onEmailChange(String value) {
     final email = Email.dirty(value);
@@ -21,16 +29,16 @@ class RegisterFormNotifier extends StateNotifier<RegisterFormState> {
         isValid: Formz.validate([
           email,
           state.password,
-          state.fullname,
+          state.fullName,
         ]));
   }
 
   onFullnameChange(String value) {
-    final fullname = Fullname.dirty(value);
+    final fullName = FullName.dirty(value);
     state = state.copyWith(
-        fullname: fullname,
+        fullName: fullName,
         isValid: Formz.validate([
-          fullname,
+          fullName,
           state.email,
           state.password,
         ]));
@@ -43,39 +51,37 @@ class RegisterFormNotifier extends StateNotifier<RegisterFormState> {
         isValid: Formz.validate([
           password,
           state.email,
-          state.fullname,
+          state.fullName,
         ]));
   }
 
-  onReapitPasswordChange(String value) {
-    final reapit = Password.dirty(value);
-    state = state.copyWith(
-        password: reapit,
-        isValid: Formz.validate(
-            [reapit, state.email, state.fullname, state.password]));
-  }
+  
 
-  onFormSubmit() {
+  onFormSubmit() async {
     _touchEveryField();
 
     if (!state.isValid) return;
 
-    if (state.password != state.reapit) return;
+    await registerUserCallback( 
+      state.fullName.value, 
+      state.email.value, 
+      state.password.value,
+     );
 
-    print(state);
   }
 
   _touchEveryField() {
+    final fullName = FullName.dirty(state.fullName.value);
     final email = Email.dirty(state.email.value);
     final password = Password.dirty(state.password.value);
-    final fullname = Fullname.dirty(state.fullname.value);
+    
 
     state = state.copyWith(
         isFormPosted: true,
         email: email,
         password: password,
-        fullname: fullname,
-        isValid: Formz.validate([state.email, state.password, state.fullname]));
+        fullName: fullName,
+        isValid: Formz.validate([state.email, state.password, state.fullName]));
   }
 }
 
@@ -87,8 +93,7 @@ class RegisterFormState {
   final bool isValid;
   final Email email;
   final Password password;
-  final Password reapit;
-  final Fullname fullname;
+  final FullName fullName;
 
   RegisterFormState({
     this.isPosting = false,
@@ -96,8 +101,7 @@ class RegisterFormState {
     this.isValid = false,
     this.email = const Email.pure(),
     this.password = const Password.pure(),
-    this.reapit = const Password.pure(),
-    this.fullname = const Fullname.pure(),
+    this.fullName = const FullName.pure(),
   });
 
   RegisterFormState copyWith({
@@ -106,8 +110,7 @@ class RegisterFormState {
     bool? isValid,
     Email? email,
     Password? password,
-    Password? reapit,
-    Fullname? fullname,
+    FullName? fullName,
   }) =>
       RegisterFormState(
         isPosting: isPosting ?? this.isPosting,
@@ -115,8 +118,7 @@ class RegisterFormState {
         isValid: isValid ?? this.isValid,
         email: email ?? this.email,
         password: password ?? this.password,
-        reapit: reapit ?? this.reapit,
-        fullname: fullname ?? this.fullname,
+        fullName: fullName ?? this.fullName,
       );
 
   @override
@@ -128,8 +130,7 @@ class RegisterFormState {
    isValid: $isValid
    email: $email
    password: $password
-   reapit: $reapit
-   fullname: $fullname
+   fullName: $fullName
    ''';
   }
 }

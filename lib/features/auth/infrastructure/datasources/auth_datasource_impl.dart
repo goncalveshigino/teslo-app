@@ -44,8 +44,27 @@ class AuthDataSourceImpl extends AuthDatasource {
   }
 
   @override
-  Future<UserEntity> register(String email, String password, String fullName) {
-    throw UnimplementedError();
+  Future<UserEntity> register(String fullName, String email, String password ) async {
+    try {
+      
+      final response = await dio.post('/auth/register', data: {
+        'fullName': fullName,
+        'email': email, 
+        'password': password
+      });
+
+      final user = UserMapper.userJsonToEntity(response.data);
+      return user;
+
+    }  on DioError catch (e) {
+       if( e.response?.statusCode == 401 ) {
+        throw CustomError(e.response?.data['message'] ?? 'Tente novamente');
+       }
+      if( e.type == DioErrorType.connectionTimeout ) throw CustomError('Revisar conexao com  internet');
+       throw Exception();
+    } catch (e) {
+       throw Exception();
+    }
   }
 
 }

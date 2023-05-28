@@ -28,13 +28,21 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  void register(String email, String fullname, String password) async {
-
+  Future<void> register(String fullName, String email, String password) async {
+      await Future.delayed(const Duration( milliseconds: 500));
+     
+     try {
+       final user = await authRepository.register(fullName, email, password);
+       _setLoggedUser(user);
+     } on CustomError catch (e) {
+       logout( e.message );
+    } 
   }
 
   void checkAuthStatus() async {
 
   }
+
   void _setLoggedUser( UserEntity user ) {
     // TODO: guardar token 
     state = state.copyWith(

@@ -40,6 +40,7 @@ class LoginFormNotifier extends StateNotifier<LoginFormState> {
   }
 
   _touchEveryField() {
+    
     final email = Email.dirty(state.email.value);
     final password = Password.dirty(state.password.value);
 
@@ -50,13 +51,15 @@ class LoginFormNotifier extends StateNotifier<LoginFormState> {
         isValid: Formz.validate([
           state.email,
           state.password,
-        ]));
+        ])
+      );
   }
 }
 
 //! 1 - State de provider
 
 class LoginFormState {
+  
   final bool isPosting;
   final bool isFormPosted;
   final bool isValid;
