@@ -74,9 +74,9 @@ class _RegisterForm extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 50),
       child: Column(
         children: [
-          const SizedBox(height: 50),
+          const Spacer(),
           Text('Nova conta', style: textStyles.titleMedium),
-          const SizedBox(height: 50),
+        const Spacer(),
           CustomTextFormField(
               label: 'Nome completo',
               keyboardType: TextInputType.emailAddress,
@@ -103,14 +103,13 @@ class _RegisterForm extends ConsumerWidget {
                   ? registerForm.password.errorMessage
                   : null),
           const SizedBox(height: 30),
-          // CustomTextFormField(
-          //   label: 'Repita a password',
-          //   obscureText: true,
-          //   validator: (value) => registerForm.password.value = value!,
-          //   errorMessage: registerForm.isFormPosted
-          //       ? registerForm.password.errorMessage
-          //       : null,
-          // ),
+          CustomTextFormField(
+            label: 'Repita a password',
+            obscureText: true,
+            errorMessage: registerForm.isFormPosted
+                ? registerForm.password.errorMessage
+                : null,
+          ),
           const SizedBox(height: 30),
           SizedBox(
               width: double.infinity,

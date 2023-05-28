@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:teslo_shop/features/auth/presentation/providers/auth_provider.dart';
 import 'package:teslo_shop/features/shared/shared.dart';
 
 import '../providers/providers.dart';
@@ -99,7 +98,6 @@ class _LoginForm extends ConsumerWidget {
                 text: 'Entrar',
                 buttonColor: Colors.black,
                 onPressed: () {
-                  context.push('/');
                   ref.read(loginFormProvider.notifier).onFormSubmit();
                 },
               )),
