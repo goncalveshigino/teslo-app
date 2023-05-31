@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:go_router/go_router.dart';
 import 'package:teslo_shop/features/products/presentation/provider/products_provider.dart';
 import 'package:teslo_shop/features/shared/shared.dart';
 
@@ -89,7 +90,9 @@ class _ProductsViewState extends ConsumerState {
 
           
           final product = productsState.products[index]; 
-          return ProductCard( product: product,);
+          return GestureDetector(
+            onTap: () => context.push('/product/${ product.id }'),
+            child: ProductCard( product: product,));
         },
       ),
     );
