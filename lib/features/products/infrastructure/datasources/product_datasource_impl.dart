@@ -3,6 +3,8 @@ import 'package:teslo_shop/config/config.dart';
 
 import 'package:teslo_shop/features/products/domain/domain.dart';
 
+import '../../products.dart';
+
 
 class ProductsDatasourceImpl extends ProductsDatasource {
 
@@ -38,7 +40,7 @@ class ProductsDatasourceImpl extends ProductsDatasource {
      final List<ProductEntity> products = [];
 
      for( final product in respose.data ?? [] ) {
-      //products.add()
+      products.add( ProductMapper.jsonToEntity(product) );
      }
 
      return products;
