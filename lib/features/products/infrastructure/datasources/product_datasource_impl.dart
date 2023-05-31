@@ -9,15 +9,15 @@ import '../../products.dart';
 class ProductsDatasourceImpl extends ProductsDatasource {
 
   late final Dio dio;
-  final String accesstoken;
+  final String accessToken;
 
   ProductsDatasourceImpl({
-    required this.accesstoken
+    required this.accessToken, 
   }): dio = Dio(
     BaseOptions(
       baseUrl: Environment.apiUrl, 
       headers: {
-        'Authorization': 'Bearer $accesstoken'
+        'Authorization': 'Bearer $accessToken'
       }
     )
   );
@@ -36,7 +36,7 @@ class ProductsDatasourceImpl extends ProductsDatasource {
 
   @override
   Future<List<ProductEntity>> getProductsByPage({int limit = 10, int offset = 0}) async {
-     final respose = await dio.get<List>('/api/products?limit=$limit&offset=$offset');
+     final respose = await dio.get<List>('/products?limit=$limit&offset=$offset');
      final List<ProductEntity> products = [];
 
      for( final product in respose.data ?? [] ) {
