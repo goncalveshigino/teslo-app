@@ -25,6 +25,8 @@ class SideMenuState extends ConsumerState<SideMenu> {
 
     final hasNotch = MediaQuery.of(context).viewPadding.top > 35;
     final textStyles = Theme.of(context).textTheme;
+
+    
     
 
     return NavigationDrawer(

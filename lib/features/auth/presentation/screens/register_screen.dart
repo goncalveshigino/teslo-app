@@ -103,13 +103,13 @@ class _RegisterForm extends ConsumerWidget {
                   ? registerForm.password.errorMessage
                   : null),
           const SizedBox(height: 30),
-          CustomTextFormField(
-            label: 'Repita a password',
-            obscureText: true,
-            errorMessage: registerForm.isFormPosted
-                ? registerForm.password.errorMessage
-                : null,
-          ),
+          // CustomTextFormField(
+          //   label: 'Repita a password',
+          //   obscureText: true,
+          //   errorMessage: registerForm.isFormPosted
+          //       ? registerForm.password.errorMessage
+          //       : null,
+          // ),
           const SizedBox(height: 30),
           SizedBox(
               width: double.infinity,
@@ -118,7 +118,6 @@ class _RegisterForm extends ConsumerWidget {
                 text: 'Criar',
                 buttonColor: Colors.black,
                 onPressed: () {
-                  context.push('/login');
                   ref.read(registerFormProvider.notifier).onFormSubmit();
                 },
               )),
