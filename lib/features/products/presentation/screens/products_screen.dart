@@ -54,7 +54,13 @@ class _ProductsViewState extends ConsumerState {
   void initState() {
     super.initState();
 
-     ref.read(productsProvider.notifier).loadNextPage();
+    scrollController.addListener(() {
+      if((scrollController.position.pixels + 400) >= scrollController.position.maxScrollExtent ) {
+          ref.read(productsProvider.notifier).loadNextPage();
+      } 
+    });
+
+     
   }
 
 
@@ -73,12 +79,14 @@ class _ProductsViewState extends ConsumerState {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10), 
       child: MasonryGridView.count(
+        controller: scrollController,
         physics: const BouncingScrollPhysics(),
         crossAxisCount: 2,
         crossAxisSpacing: 20,
         mainAxisSpacing: 35,
         itemCount: productsState.products.length,
         itemBuilder: (context, index){
+
           
           final product = productsState.products[index]; 
           return ProductCard( product: product,);
