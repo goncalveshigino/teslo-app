@@ -17,7 +17,7 @@ class ProductsScreen extends StatelessWidget {
     final scaffoldKey = GlobalKey<ScaffoldState>();
 
     return Scaffold(
-      drawer: SideMenu( scaffoldKey: scaffoldKey ),
+      drawer: SideMenu( scaffoldKey: scaffoldKey, ),
       appBar: AppBar(
         title: const Text('Products'),
         actions: [
@@ -88,11 +88,11 @@ class _ProductsViewState extends ConsumerState {
         itemCount: productsState.products.length,
         itemBuilder: (context, index){
 
-          
           final product = productsState.products[index]; 
           return GestureDetector(
             onTap: () => context.push('/product/${ product.id }'),
-            child: ProductCard( product: product,));
+            child: ProductCard( product: product,),
+          );
         },
       ),
     );

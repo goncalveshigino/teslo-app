@@ -5,6 +5,8 @@ import 'package:teslo_shop/features/shared/shared.dart';
 
 class SideMenu extends ConsumerStatefulWidget {
 
+  
+
   final GlobalKey<ScaffoldState> scaffoldKey;
 
   const SideMenu({
@@ -26,7 +28,7 @@ class SideMenuState extends ConsumerState<SideMenu> {
     final hasNotch = MediaQuery.of(context).viewPadding.top > 35;
     final textStyles = Theme.of(context).textTheme;
 
-    
+    final authUser = ref.watch( authProvider ).user;
     
 
     return NavigationDrawer(
@@ -52,7 +54,7 @@ class SideMenuState extends ConsumerState<SideMenu> {
 
         Padding(
           padding: const EdgeInsets.fromLTRB(20, 0, 16, 10),
-          child: Text('Goncalves Higino', style: textStyles.titleSmall ),
+          child: Text( authUser!.fullName, style: textStyles.titleSmall ),
         ),
 
         const NavigationDrawerDestination(

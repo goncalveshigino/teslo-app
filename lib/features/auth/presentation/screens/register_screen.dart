@@ -9,6 +9,7 @@ class RegisterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     final size = MediaQuery.of(context).size;
     final scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
     final textStyles = Theme.of(context).textTheme;
@@ -97,19 +98,19 @@ class _RegisterForm extends ConsumerWidget {
           CustomTextFormField(
               label: 'Password',
               obscureText: true,
-              onChanged:
-                  ref.read(registerFormProvider.notifier).onPasswordChange,
+              onChanged: ref.read(registerFormProvider.notifier).onPasswordChange,
               errorMessage: registerForm.isFormPosted
                   ? registerForm.password.errorMessage
                   : null),
           const SizedBox(height: 30),
-          // CustomTextFormField(
-          //   label: 'Repita a password',
-          //   obscureText: true,
-          //   errorMessage: registerForm.isFormPosted
-          //       ? registerForm.password.errorMessage
-          //       : null,
-          // ),
+          CustomTextFormField(
+            label: 'Repita a password',
+            onChanged: ref.read(registerFormProvider.notifier).onPasswordChange,
+            obscureText: true,
+            errorMessage: registerForm.isFormPosted
+                ? registerForm.password.errorMessage
+                : null,
+          ),
           const SizedBox(height: 30),
           SizedBox(
               width: double.infinity,

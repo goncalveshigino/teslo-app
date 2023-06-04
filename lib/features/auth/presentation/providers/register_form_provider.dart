@@ -6,18 +6,16 @@ import 'package:teslo_shop/features/shared/shared.dart';
 import 'providers.dart';
 
 //! 3 - StateNotifierProvider - Que sera consumido fora
-final registerFormProvider = StateNotifierProvider<RegisterFormNotifier, RegisterFormState>((ref) {
+final registerFormProvider =
+    StateNotifierProvider<RegisterFormNotifier, RegisterFormState>((ref) {
+  final registerUserCallback = ref.watch(authProvider.notifier).register;
 
-  final registerUserCallback = ref.watch( authProvider.notifier).register;
-
-  return RegisterFormNotifier(registerUserCallback: registerUserCallback );
-
+  return RegisterFormNotifier(registerUserCallback: registerUserCallback);
 });
 
 //! 2 - Como implementamos um notifier
 class RegisterFormNotifier extends StateNotifier<RegisterFormState> {
-
-  final Function(String, String, String ) registerUserCallback;
+  final Function(String, String, String) registerUserCallback;
 
   RegisterFormNotifier({required this.registerUserCallback})
       : super(RegisterFormState());
@@ -47,7 +45,7 @@ class RegisterFormNotifier extends StateNotifier<RegisterFormState> {
   onPasswordChange(String value) {
     final password = Password.dirty(value);
     state = state.copyWith(
-        password: password,
+        password: state.password,
         isValid: Formz.validate([
           password,
           state.email,
@@ -55,18 +53,16 @@ class RegisterFormNotifier extends StateNotifier<RegisterFormState> {
         ]));
   }
 
-  
-
   onFormSubmit() async {
     _touchEveryField();
 
-    if (!state.isValid) return;
+    if (!state.isValid ) return;
 
-    await registerUserCallback( 
-      state.fullName.value, 
-      state.email.value, 
+    await registerUserCallback(
+      state.fullName.value,
+      state.email.value,
       state.password.value,
-     );
+    );
 
   }
 
@@ -74,7 +70,6 @@ class RegisterFormNotifier extends StateNotifier<RegisterFormState> {
     final fullName = FullName.dirty(state.fullName.value);
     final email = Email.dirty(state.email.value);
     final password = Password.dirty(state.password.value);
-    
 
     state = state.copyWith(
         isFormPosted: true,
@@ -124,7 +119,7 @@ class RegisterFormState {
   @override
   String toString() {
     return '''
-   LoginFormState: 
+   RegisterFormState: 
    isPosting: $isPosting
    isFormPosted: $isFormPosted
    isValid: $isValid

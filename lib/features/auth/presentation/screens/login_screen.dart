@@ -75,7 +75,7 @@ class _LoginForm extends ConsumerWidget {
         children: [
           const SizedBox(height: 50),
           Text('Login', style: textStyles.titleLarge),
-          const SizedBox(height: 90),
+          const SizedBox(height: 50),
           CustomTextFormField(
               label: 'Email',
               keyboardType: TextInputType.emailAddress,
