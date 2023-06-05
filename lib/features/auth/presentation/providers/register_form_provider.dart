@@ -45,12 +45,13 @@ class RegisterFormNotifier extends StateNotifier<RegisterFormState> {
   onPasswordChange(String value) {
     final password = Password.dirty(value);
     state = state.copyWith(
-        password: state.password,
-        isValid: Formz.validate([
-          password,
-          state.email,
-          state.fullName,
-        ]));
+      password: state.password,
+      isValid: Formz.validate([
+        password,
+        state.email,
+        state.fullName,
+      ])
+    );
   }
 
   onFormSubmit() async {

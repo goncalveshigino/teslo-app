@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teslo_shop/features/products/presentation/provider/providers.dart';
-import 'package:teslo_shop/features/shared/widgets/full_screen_loader.dart';
+
 
 import '../../../shared/widgets/widgets.dart';
 import '../../domain/domain.dart';
@@ -21,7 +21,7 @@ class ProductScreen extends ConsumerWidget {
     final productState = ref.watch(productProvider(productId));
 
     return Scaffold(
-      appBar: AppBar( title: Text('Editar Produto'), 
+      appBar: AppBar( title: const Text('Editar Produto'), 
       actions: [
         IconButton(onPressed: (){
 
@@ -31,7 +31,7 @@ class ProductScreen extends ConsumerWidget {
       ),
       
       body:  productState.isLoading 
-        ? FullScreenLoader()
+        ? const FullScreenLoader()
         : _ProductView(product: productState.product!),
       floatingActionButton: FloatingActionButton(
         onPressed: (){}, 
