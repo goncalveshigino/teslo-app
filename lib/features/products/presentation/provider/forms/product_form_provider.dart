@@ -6,7 +6,7 @@ import '../../../../../config/const/environment.dart';
 import '../../../../shared/infrastructure/inputs/inputs.dart';
 
 
-final productFormProduct = StateNotifierProvider.autoDispose.family<ProductFormNotifier, ProductFormState, ProductEntity>(
+final productFormProvider = StateNotifierProvider.autoDispose.family<ProductFormNotifier, ProductFormState, ProductEntity>(
   (ref, product) {
 
     //TODO: createUpdateCallback
@@ -135,6 +135,11 @@ class ProductFormNotifier extends StateNotifier<ProductFormState> {
   void onSizeChanged( List<String> sizes ){
     state = state.copyWith(sizes: sizes );
   }
+
+   void onDescriptionChanged( String description ){
+    state = state.copyWith( descriptions: description );
+  }
+
 
   void onGenderChanged( String gender ) {
     state = state.copyWith(gender: gender);
