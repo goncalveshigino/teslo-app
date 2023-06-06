@@ -20,6 +20,13 @@ class ProductScreen extends ConsumerWidget {
 
     final productState = ref.watch(productProvider(productId));
 
+    void showSnackbar( BuildContext context ) {
+      ScaffoldMessenger.of(context).clearSnackBars(); 
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Produto atualizado'))
+      );
+    }
+
     return Scaffold(
       appBar: AppBar( title: const Text('Editar Produto'), 
       actions: [
@@ -34,7 +41,17 @@ class ProductScreen extends ConsumerWidget {
         ? const FullScreenLoader()
         : _ProductView(product: productState.product!),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){}, 
+        onPressed: (){
+          if( productState.product == null ) return;
+
+          ref.read( productFormProvider(productState.product!).notifier
+          ).onFormSubmit()
+          .then((value){
+            if ( !value ) return;
+            showSnackbar(context);
+          });
+
+        }, 
         child: const Icon( Icons.save_as_outlined)
       ),
     );
@@ -65,7 +82,11 @@ class _ProductView extends ConsumerWidget {
           ),
     
           const SizedBox( height: 10 ),
-          Center(child: Text( productForm.title.value, style: textStyles.titleSmall )),
+          Center(child: Text( 
+            productForm.title.value, 
+            style: textStyles.titleSmall, 
+            textAlign: TextAlign.center,
+           ),),
           const SizedBox( height: 10 ),
           _ProductInformation( product: product ),
           
