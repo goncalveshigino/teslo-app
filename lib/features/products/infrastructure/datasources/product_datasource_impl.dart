@@ -23,6 +23,19 @@ class ProductsDatasourceImpl extends ProductsDatasource {
     )
   );
 
+
+  Future<List<String>> _uploadPhotos( List<String> photos ) async {
+
+      final photosToUpload = photos.where((element) => element.contains('/') ).toList();
+      final photosToIgnore = photos.where((element) => !element.contains('/') ).toList();
+
+      //TODO: criar uma serie de futures de carregar images
+      final List<Future<String>> uploadJob = [];
+      final newImages = await Future.wait(uploadJob);
+
+      return [...photosToIgnore, ...newImages];
+  }
+
   @override
   Future<ProductEntity> createUpdateProduct(Map<String, dynamic> productLike) async {
    
@@ -33,7 +46,9 @@ class ProductsDatasourceImpl extends ProductsDatasource {
      final String url = (productId == null) ? '/products' : '/products/$productId';
 
      productLike.remove('id');
+     productLike['images'] = await _uploadPhotos( productLike['images'] );
 
+   throw Exception();
 
      final response = await dio.request(
       url, 
