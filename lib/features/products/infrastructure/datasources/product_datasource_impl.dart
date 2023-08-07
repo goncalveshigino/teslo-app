@@ -24,13 +24,33 @@ class ProductsDatasourceImpl extends ProductsDatasource {
   );
 
 
+  Future<String> _updateFile( String path ) async {
+
+    try {
+
+      final  filename = path.split('/').last;
+      final FormData data = FormData.fromMap({
+        'file': MultipartFile.fromFileSync(path, filename: filename)
+      });
+
+      final response = await dio.post('/files/product', data: data );
+
+      return response.data['image'];
+
+    } catch (e) {
+      throw Exception();
+    }
+
+  }
+
+
   Future<List<String>> _uploadPhotos( List<String> photos ) async {
 
       final photosToUpload = photos.where((element) => element.contains('/') ).toList();
       final photosToIgnore = photos.where((element) => !element.contains('/') ).toList();
 
-      //TODO: criar uma serie de futures de carregar images
-      final List<Future<String>> uploadJob = [];
+
+      final List<Future<String>> uploadJob = photosToUpload.map( _updateFile ).toList();
       final newImages = await Future.wait(uploadJob);
 
       return [...photosToIgnore, ...newImages];
@@ -48,7 +68,7 @@ class ProductsDatasourceImpl extends ProductsDatasource {
      productLike.remove('id');
      productLike['images'] = await _uploadPhotos( productLike['images'] );
 
-   throw Exception();
+  
 
      final response = await dio.request(
       url, 
@@ -64,6 +84,7 @@ class ProductsDatasourceImpl extends ProductsDatasource {
    } catch (e) {
      throw Exception();
    }
+
   }
 
   @override
@@ -81,10 +102,12 @@ class ProductsDatasourceImpl extends ProductsDatasource {
     } catch (e) {
        throw Exception();
     }
+
   }
 
   @override
   Future<List<ProductEntity>> getProductsByPage({int limit = 10, int offset = 0}) async {
+
      final respose = await dio.get<List>('/products?limit=$limit&offset=$offset');
      final List<ProductEntity> products = [];
 
@@ -93,6 +116,7 @@ class ProductsDatasourceImpl extends ProductsDatasource {
      }
 
      return products;
+     
   }
 
   @override

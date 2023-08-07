@@ -26,5 +26,6 @@ class MainApp extends ConsumerWidget {
       theme: AppTheme().getTheme(),
       debugShowCheckedModeBanner: false,
     );
+    
   }
 }
